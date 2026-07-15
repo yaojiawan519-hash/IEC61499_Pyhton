@@ -1,9 +1,16 @@
 
 class FunctionBlockNetwork:
      def __init__(self, Name, Comment, FunctionBlocks,
-                  EventConnections=None, DataConnections=None):
+                  EventConnections=None, DataConnections=None,
+                  InputEvents=None, OutputEvents=None,
+                  InputVars=None, OutputVars=None, Position=None):
          self.Name = Name
          self.Comment = Comment
+         self.InputEvents = InputEvents if InputEvents is not None else []
+         self.OutputEvents = OutputEvents if OutputEvents is not None else []
+         self.InputVars = InputVars if InputVars is not None else []
+         self.OutputVars = OutputVars if OutputVars is not None else []
+         self.Position = Position
          self.FunctionBlocks = FunctionBlocks
          self.EventConnections = EventConnections if EventConnections is not None else []
          self.DataConnections = DataConnections if DataConnections is not None else []

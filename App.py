@@ -1,5 +1,6 @@
 from FunctionBlockNetwork  import *
 from utilities import Position
+from events.E_RESTART import E_RESTART
 from events.E_CYCLE import E_CYCLE
 from events.E_SWITCH import E_SWITCH
 from events.E_CTU import E_CTU
@@ -7,6 +8,9 @@ from events.E_CTD import E_CTD
 class App(FunctionBlockNetwork):
     def __init__(self):
         self.FunctionBlocks = []
+        # ===== E_RESTART：resource 生命周期入口 =====
+        rstart=E_RESTART("RSTART",Position(-200,0))
+        self.FunctionBlocks.append(rstart)
         # ===== 共用周期发生器：300ms =====
         e_cycle=E_CYCLE("E_CYCLE_1",Position(0,0))
         e_cycle.setVarValue("DT", "#T300ms")
@@ -27,6 +31,14 @@ class App(FunctionBlockNetwork):
         # 每条 = (源FB名, 源引脚名, 目的FB名, 目的引脚名)
         self.EventConnections = []
         self.DataConnections = []
+        # ----- E_RESTART -> E_CYCLE 生命周期连接 -----
+        # RSTART.COLD/WARM -> E_CYCLE.START   RSTART.STOP -> E_CYCLE.STOP
+        self.EventConnections.append((rstart.Name, "COLD",
+                                      e_cycle.Name, e_cycle.InputEvents[0].name))
+        self.EventConnections.append((rstart.Name, "WARM",
+                                      e_cycle.Name, e_cycle.InputEvents[0].name))
+        self.EventConnections.append((rstart.Name, "STOP",
+                                      e_cycle.Name, e_cycle.InputEvents[1].name))
         # ----- Up Counter 连接 -----
         # E_CYCLE.EO -> E_SWITCH.EI
         self.EventConnections.append((e_cycle.Name, e_cycle.OutputEvents[0].name,
