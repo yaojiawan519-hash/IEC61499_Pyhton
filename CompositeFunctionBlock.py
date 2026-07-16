@@ -1,4 +1,6 @@
 from BasicFB import *
+from utilities import Connection
+from BasicFB import _increment_event
 
 class CompositeFunctionBlock:
 
@@ -13,9 +15,17 @@ class CompositeFunctionBlock:
         self.InputVars = InputVars if InputVars is not None else []
         self.OutputVars = OutputVars if OutputVars is not None else []
         self.Position = Position
+        # 绘制坐标：由上层网络 draw 时回填。
+        self.x = None
+        self.y = None
+        self.width = None
+        self.height = None
         self.FunctionBlocks = FunctionBlocks if FunctionBlocks is not None else []
-        self.EventConnections = EventConnections if EventConnections is not None else []
-        self.DataConnections = DataConnections if DataConnections is not None else []
+        # 规整为 Connection 对象（兼容传入的 4 元组）。
+        self.EventConnections = [Connection.normalize(c, "event")
+                                 for c in (EventConnections or [])]
+        self.DataConnections = [Connection.normalize(c, "data")
+                                for c in (DataConnections or [])]
         # 回指针：复合块自身也可挂到上层网络，sendOutputEvent 依赖它上行。
         self.network = None
         # 回填子块的网络指针：子块 sendOutputEvent 经本块 NotifyEvent 转发。
@@ -97,8 +107,13 @@ class CompositeFunctionBlock:
             if value is not None:
                 dst.setVarValue(dpin, value)
 
+    def receiveEvent(self, event):
+        """事件入口：先记本复合块输入事件计数，再驱动 eventTrigger。"""
+        _increment_event(self.InputEvents, event)
+        self.eventTrigger(event)
+
     def eventTrigger(self, FB_name, event=None):
-    
+
         if event is None:
             event = FB_name
             FB_name = self.Name
@@ -111,11 +126,13 @@ class CompositeFunctionBlock:
             if fb is None:
                 return
             self.propagateData(FB_name)
-            fb.eventTrigger(event)
+            fb.receiveEvent(event)   # 经子块入口计数其输入事件
 
     def NotifyEvent(self, FB_name, event):
         """某功能块产生了输出事件：按事件连接转发到下游输入事件。"""
         if FB_name == self.Name:
+            # 本复合块对外输出事件：先记输出事件计数，再上行
+            _increment_event(self.OutputEvents, event)
             if self.network is not None:
                 self.network.NotifyEvent(self.Name, event)
             return

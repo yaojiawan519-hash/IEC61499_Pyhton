@@ -15,3 +15,7 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+
+# 生成产物 / 临时 scratch
+outputs/
+temp/
