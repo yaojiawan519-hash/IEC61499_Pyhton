@@ -23,5 +23,8 @@ python main.py
 ## 运行复合功能块
 python Blink.py
 
-## 结束语 
+## 结束语
 总而言之，AI Code 工程中，模块的结构尽可能规范和清晰，有助于AI 的理解和生成。多一点规范，少一点灵活性。
+
+## 开源许可
+本项目基于 [MIT License](LICENSE) 开源，Copyright (c) 2026 yaojiawan519-hash。
