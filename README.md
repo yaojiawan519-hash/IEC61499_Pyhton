@@ -9,9 +9,19 @@
 这是有由多个功能块通过功能块网络实现的功能块。实现方式也做了简化，将复合功能块也加入了内部的功能块字典中，将复合功能块的事件/数据连接也加入连接表中。复合功能块和他内部的功能块一样处理。唯一的区别在于数据传递和事件触发分为复合功能块内和外。复合功能块的运行简化。
 ## 服务功能 Service Function Block (SFB)
 这是与外部资源关联的功能块，大多数是异步操作的方式运行。在这个运行时中，我采纳了Python 的Thread 线程结构。
+
+## OPCUA Server
+在runtime 中，建立一个OPCUA Server 的实例，将所有的功能块都转换成OPCUA 的Object ，事件和数据是该对象的变量（Variable）可以通过OPCUA Client访问
+## Status Watch 线程
+在runtime 中，建立了一个Status Watch 线程，定时地更新 OPCUA 信息模型
+## 功能块网络图的绘制
+使用 ELK（Eclipse Layout Kernel）的python 工具生成，并且以SVG 图形输出到本地 outputs 目录中
+## 导出 4diac fbt 文件
+功能块模型中添加了 ExportXML 方法，导出模型的4diac XML 格式（fbt）到outputs 目录中。
 ## 运行
 python main.py
 ## 运行复合功能块
 python Blink.py
+
 ## 结束语 
 总而言之，AI Code 工程中，模块的结构尽可能规范和清晰，有助于AI 的理解和生成。多一点规范，少一点灵活性。
