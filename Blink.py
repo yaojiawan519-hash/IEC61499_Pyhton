@@ -1,7 +1,7 @@
 from FunctionBlockNetwork import *
 from utilities import Position
-from events.E_RESTART import E_RESTART
-from events.LED_BLINK import LED_BLINK
+from stdlib.E_RESTART import E_RESTART
+from stdlib.LED_BLINK import LED_BLINK
 
 
 class Blink(FunctionBlockNetwork):

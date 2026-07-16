@@ -1,10 +1,10 @@
 from FunctionBlockNetwork  import *
 from utilities import Position
-from events.E_RESTART import E_RESTART
-from events.E_CYCLE import E_CYCLE
-from events.E_SWITCH import E_SWITCH
-from events.E_CTU import E_CTU
-from events.E_CTD import E_CTD
+from stdlib.E_RESTART import E_RESTART
+from stdlib.E_CYCLE import E_CYCLE
+from stdlib.E_SWITCH import E_SWITCH
+from stdlib.E_CTU import E_CTU
+from stdlib.E_CTD import E_CTD
 class App(FunctionBlockNetwork):
     def __init__(self):
         self.FunctionBlocks = []

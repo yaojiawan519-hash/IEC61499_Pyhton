@@ -1,8 +1,8 @@
 from BasicFB import *
 from CompositeFunctionBlock import CompositeFunctionBlock
-from events.E_CYCLE import E_CYCLE
-from events.E_CTD import E_CTD
-from events.E_SWITCH import E_SWITCH
+from stdlib.E_CYCLE import E_CYCLE
+from stdlib.E_CTD import E_CTD
+from stdlib.E_SWITCH import E_SWITCH
 from utilities import Position
 
 
